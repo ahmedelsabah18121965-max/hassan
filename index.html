@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>📜 منصة إدارة الشهادات الاستثمارية</title>
     <!-- مكتبات تصدير PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -21,7 +21,6 @@
             padding: 20px;
         }
 
-        /* ========== شاشة تسجيل الدخول ========== */
         .login-screen {
             position: fixed;
             top: 0;
@@ -112,7 +111,6 @@
             font-size: 14px;
         }
 
-        /* ========== التطبيق الرئيسي ========== */
         .main-app {
             display: none;
             max-width: 1300px;
@@ -418,6 +416,66 @@
             letter-spacing: 0.5px;
         }
 
+        /* حاوية التقرير المخفية للتصدير */
+        .report-container {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 1100px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            font-family: 'Segoe UI', 'Tajawal', 'Cairo', sans-serif;
+        }
+
+        .report-container h1 {
+            color: #2d6a4f;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .report-container .report-date {
+            text-align: center;
+            color: #7c8a7c;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .report-container table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .report-container th {
+            background: #2d6a4f;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .report-container td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+        }
+
+        .report-container .total-row {
+            background: #f5f0e8;
+            font-weight: bold;
+        }
+
+        .report-footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #888;
+        }
+
         @media (max-width: 650px) {
             .hero-btn { padding: 30px 15px; font-size: 22px; }
             .panel { padding: 20px; }
@@ -505,6 +563,9 @@
         </div>
     </div>
 </div>
+
+<!-- حاوية التقرير المخفية -->
+<div id="reportContainer" class="report-container"></div>
 
 <div id="toastMsg" class="toast"></div>
 
@@ -614,7 +675,7 @@
         let tfoot = document.getElementById('tableFooter');
         if (!tbody) return;
         if (certificates.length === 0) {
-            tbody.innerHTML = '<td><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
             tfoot.innerHTML = '';
             return;
         }
@@ -631,7 +692,7 @@
                         <td>${c.interestRate}%</td>
                         <td>${c.returnAmount} ج.م</td>
                         <td><button class="action-btn" onclick="deleteCertificate(${c.id})">🗑️ حذف</button></td>
-                     </tr>`;
+                    </tr>`;
         }
         tbody.innerHTML = html;
         tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>📊 الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
@@ -641,7 +702,7 @@
         let trashBody = document.getElementById('trashBody');
         if (!trashBody) return;
         if (trash.length === 0) {
-            trashBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">🗑️ السلة فارغة</td></tr>';
+            trashBody.innerHTML = '<td><td colspan="4" style="text-align:center;">🗑️ السلة فارغة</td></tr>';
             return;
         }
         let html = '';
@@ -654,12 +715,12 @@
                             <button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button>
                             <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button>
                         </td>
-                     </tr>`;
+                    </tr>`;
         }
         trashBody.innerHTML = html;
     }
 
-    // ============= دالة تصدير PDF بخط عربي =============
+    // ============= دالة تصدير PDF باستخدام html2canvas =============
     window.exportToPDF = async function() {
         if (certificates.length === 0) {
             alert('📭 لا توجد شهادات لتصدير التقرير');
@@ -668,37 +729,9 @@
 
         showToast('📄 جاري إنشاء التقرير...');
         
-        const { jsPDF } = window.jspdf;
-        // إنشاء مستند بحجم A4 أفقي
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-        
-        // إضافة خط يدعم العربية (استخدام خط helvetica مع إعدادات الاتجاه)
-        doc.setLanguage("ar");
-        
-        // العنوان الرئيسي
         const now = new Date();
         const dateStr = now.toLocaleDateString('ar-EG');
         const timeStr = now.toLocaleTimeString('ar-EG');
-        
-        // إطار زخرفي للرأس
-        doc.setDrawColor(255, 179, 71);
-        doc.setLineWidth(0.5);
-        doc.rect(10, 8, 277, 35);
-        
-        doc.setFontSize(24);
-        doc.setTextColor(45, 106, 79);
-        doc.setFont("helvetica", "bold");
-        doc.text("📜 تقرير الشهادات الاستثمارية", 148, 22, { align: "center" });
-        
-        doc.setFontSize(11);
-        doc.setTextColor(100, 100, 100);
-        doc.setFont("helvetica", "normal");
-        doc.text(`تاريخ التقرير: ${dateStr}  |  وقت الإنشاء: ${timeStr}`, 148, 34, { align: "center" });
-        
-        // معلومات إضافية
-        doc.setFontSize(10);
-        doc.setTextColor(80, 80, 80);
-        doc.text(`عدد الشهادات المسجلة: ${certificates.length} شهادة`, 148, 44, { align: "center" });
         
         // حساب الإجماليات
         let totalAmount = 0, totalReturn = 0;
@@ -707,95 +740,105 @@
             totalReturn += parseFloat(c.returnAmount);
         }
         
-        // تجهيز بيانات الجدول
-        const tableData = certificates.map(c => [
-            c.certNumber,
-            c.purchaseDate,
-            c.certAmount.toLocaleString() + " ج.م",
-            c.dueDate,
-            c.interestRate + "%",
-            c.returnAmount + " ج.م"
-        ]);
-        
-        // إضافة صف الإجمالي
-        tableData.push([
-            { content: "الإجمالي الكلي", colSpan: 2, styles: { halign: 'center', fontStyle: 'bold', fillColor: [245, 245, 220] } },
-            { content: totalAmount.toLocaleString() + " ج.م", styles: { fontStyle: 'bold', textColor: [45, 106, 79], fillColor: [245, 245, 220] } },
-            { content: "", colSpan: 2, styles: { fillColor: [245, 245, 220] } },
-            { content: totalReturn.toFixed(2) + " ج.م", styles: { fontStyle: 'bold', textColor: [45, 106, 79], fillColor: [245, 245, 220] } }
-        ]);
-        
-        // إنشاء الجدول
-        doc.autoTable({
-            head: [['رقم الشهادة', 'تاريخ الشراء', 'مبلغ الشهادة', 'تاريخ الاستحقاق', 'معدل العائد', 'مبلغ العائد']],
-            body: tableData,
-            startY: 52,
-            theme: 'grid',
-            headStyles: {
-                fillColor: [45, 106, 79],
-                textColor: 255,
-                fontStyle: 'bold',
-                halign: 'center',
-                valign: 'middle',
-                fontSize: 11
-            },
-            bodyStyles: {
-                halign: 'center',
-                fontSize: 9,
-                textColor: [50, 50, 50]
-            },
-            alternateRowStyles: {
-                fillColor: [248, 248, 248]
-            },
-            margin: { right: 15, left: 15, top: 50 },
-            columnStyles: {
-                0: { cellWidth: 35 },
-                1: { cellWidth: 28 },
-                2: { cellWidth: 42 },
-                3: { cellWidth: 28 },
-                4: { cellWidth: 28 },
-                5: { cellWidth: 38 }
-            },
-            didDrawPage: function(data) {
-                // تذييل الصفحة
-                const pageCount = doc.internal.getNumberOfPages();
-                const currentPage = doc.internal.getCurrentPageInfo().pageNumber;
+        // إنشاء محتوى التقرير HTML
+        let reportHTML = `
+            <div style="font-family: 'Segoe UI', 'Tajawal', 'Cairo', sans-serif; padding: 20px; direction: rtl;">
+                <div style="text-align: center; border-bottom: 2px solid #2d6a4f; padding-bottom: 15px; margin-bottom: 20px;">
+                    <h1 style="color: #2d6a4f; margin: 0; font-size: 28px;">📜 تقرير الشهادات الاستثمارية</h1>
+                    <p style="color: #7c8a7c; margin: 8px 0 0 0;">تاريخ التقرير: ${dateStr} - وقت الإنشاء: ${timeStr}</p>
+                    <p style="color: #7c8a7c; margin: 5px 0 0 0;">عدد الشهادات المسجلة: ${certificates.length} شهادة</p>
+                </div>
                 
-                // خط فاصل
-                doc.setDrawColor(200, 200, 200);
-                doc.setLineWidth(0.3);
-                doc.line(15, 195, 282, 195);
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <thead>
+                        <tr style="background: #2d6a4f; color: white;">
+                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">رقم الشهادة</th>
+                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">تاريخ الشراء</th>
+                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">مبلغ الشهادة</th>
+                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">تاريخ الاستحقاق</th>
+                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">معدل العائد</th>
+                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">مبلغ العائد</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        `;
+        
+        for (let c of certificates) {
+            reportHTML += `
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.certNumber}</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.purchaseDate}</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.certAmount.toLocaleString()} ج.م</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.dueDate}</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.interestRate}%</td>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.returnAmount} ج.م</td>
+                </tr>
+            `;
+        }
+        
+        reportHTML += `
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f5f0e8; font-weight: bold;">
+                            <td colspan="2" style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>📊 الإجمالي الكلي</strong></td>
+                            <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>${totalAmount.toLocaleString()} ج.م</strong></td>
+                            <td colspan="2" style="padding: 12px; border: 1px solid #ddd; text-align: center;"></td>
+                            <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>${totalReturn.toFixed(2)} ج.م</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
                 
-                doc.setFontSize(8);
-                doc.setTextColor(150, 150, 150);
-                doc.text(`الصفحة ${currentPage} من ${pageCount}`, 280, 200, { align: "right" });
-                doc.text("منصة شهاداتي - نظام إدارة الشهادات الاستثمارية", 15, 200, { align: "left" });
-            }
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                    <div style="display: inline-block; width: 200px; margin-top: 20px;">
+                        <div style="border-top: 2px solid #2d6a4f; padding-top: 8px; margin-top: 20px;">
+                            <p style="margin: 0; font-size: 12px; color: #888;">توقيع المستخدم</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px; color: #888; margin-top: 20px;">يُقر صاحب التقرير بصحة البيانات المذكورة أعلاه.</p>
+                    <p style="font-size: 12px; color: #888;">هذا التقرير صادر من منصة شهاداتي - جميع الحقوق محفوظة ©</p>
+                </div>
+            </div>
+        `;
+        
+        // وضع التقرير في الحاوية المخفية
+        const reportContainer = document.getElementById('reportContainer');
+        reportContainer.innerHTML = reportHTML;
+        
+        // استخدام html2canvas لتحويل التقرير إلى صورة
+        const element = reportContainer.firstElementChild;
+        const canvas = await html2canvas(element, {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            logging: false
         });
         
-        // الحصول على آخر Y بعد الجدول
-        const finalY = doc.lastAutoTable.finalY + 10;
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const imgWidth = 280; // عرض الصورة بالملليمتر
+        const pageHeight = 297; // ارتفاع صفحة A4
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let pdf = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
         
-        // إضافة ختم وتوقيع (اختياري)
-        doc.setDrawColor(255, 179, 71);
-        doc.setLineWidth(0.3);
-        doc.rect(210, finalY, 65, 20);
-        doc.setFontSize(8);
-        doc.setTextColor(100, 100, 100);
-        doc.text("ختم المنصة", 242, finalY + 10, { align: "center" });
-        doc.text("توقيع المستخدم", 242, finalY + 16, { align: "center" });
+        pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
         
-        // نص تأكيدي في الأسفل
-        doc.setFontSize(9);
-        doc.setTextColor(45, 106, 79);
-        doc.text("يُقر صاحب التقرير بصحة البيانات المذكورة أعلاه.", 148, finalY + 15, { align: "center" });
-        doc.setFontSize(8);
-        doc.setTextColor(120, 120, 120);
-        doc.text("هذا التقرير صادر من منصة شهاداتي - جميع الحقوق محفوظة ©", 148, finalY + 22, { align: "center" });
+        // إذا كانت الصورة أطول من صفحة، أضف صفحة جديدة
+        let heightLeft = imgHeight;
+        let pageNumber = 1;
+        while (heightLeft >= pageHeight - 20) {
+            position = heightLeft - (pageHeight - 20);
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 15, -position, imgWidth, imgHeight);
+            heightLeft -= (pageHeight - 20);
+            pageNumber++;
+        }
         
         // حفظ الملف
         const fileName = `تقرير_الشهادات_${dateStr.replace(/\//g, '-')}.pdf`;
-        doc.save(fileName);
+        pdf.save(fileName);
+        
+        // تنظيف الحاوية
+        reportContainer.innerHTML = '';
         showToast('✅ تم تصدير التقرير بنجاح');
     };
 
@@ -821,6 +864,6 @@
         }
     };
     renderKashf();
+</html>
 </script>
 </body>
-</html>
