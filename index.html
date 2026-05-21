@@ -3,471 +3,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>📜 إدارة شهادات الاستثمار</title>
+    <title>📜 منصة إدارة الشهادات الاستثمارية</title>
     <style>
-      * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', 'Tajawal', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tajawal', 'Cairo', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-body {
-    background: linear-gradient(135deg, #0b2b1f 0%, #1a4d38 100%);
-    min-height: 100vh;
-    padding: 20px;
-}
+        body {
+            background: linear-gradient(135deg, #0b2b1f 0%, #1a4d38 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-/* ========== شاشة تسجيل الدخول ========== */
-.login-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #0a2a1e, #1e5a45);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    transition: 0.5s;
-}
+        /* ========== شاشة تسجيل الدخول ========== */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a2a1e, #1e5a45);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.5s;
+        }
 
-.login-card {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    border-radius: 80px;
-    padding: 50px 40px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-    box-shadow: 0 40px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.3);
-    animation: fadeInUp 0.6s ease;
-}
+        .login-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: 80px;
+            padding: 50px 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.3);
+            animation: fadeInUp 0.6s ease;
+        }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.login-card h1 {
-    color: #2d6a4f;
-    font-size: 38px;
-    margin-bottom: 10px;
-}
+        .login-card h1 {
+            color: #2d6a4f;
+            font-size: 38px;
+            margin-bottom: 10px;
+        }
 
-.login-card h1 span {
-    color: #ffb347;
-}
+        .login-card h1 span {
+            color: #ffb347;
+        }
 
-.login-card p {
-    color: #7c8a7c;
-    margin-bottom: 35px;
-    font-size: 15px;
-}
+        .login-card p {
+            color: #7c8a7c;
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
 
-.login-card input {
-    width: 100%;
-    padding: 16px 20px;
-    margin: 12px 0;
-    font-size: 18px;
-    border-radius: 60px;
-    border: 2px solid #e0e0e0;
-    background: #f9f9f9;
-    transition: 0.2s;
-    text-align: center;
-}
+        .login-card input {
+            width: 100%;
+            padding: 16px 20px;
+            margin: 12px 0;
+            font-size: 18px;
+            border-radius: 60px;
+            border: 2px solid #e0e0e0;
+            background: #f9f9f9;
+            transition: 0.2s;
+            text-align: center;
+        }
 
-.login-card input:focus {
-    border-color: #ffb347;
-    outline: none;
-    box-shadow: 0 0 0 4px #ffb34733;
-}
+        .login-card input:focus {
+            border-color: #ffb347;
+            outline: none;
+            box-shadow: 0 0 0 4px #ffb34733;
+        }
 
-.login-btn {
-    background: linear-gradient(145deg, #2d6a4f, #1e5a45);
-    color: white;
-    border: none;
-    border-radius: 60px;
-    padding: 16px;
-    font-size: 22px;
-    font-weight: bold;
-    width: 100%;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: 0.2s;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+        .login-btn {
+            background: linear-gradient(145deg, #2d6a4f, #1e5a45);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 16px;
+            font-size: 22px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
 
-.login-btn:active {
-    transform: scale(0.97);
-}
+        .login-btn:active {
+            transform: scale(0.97);
+        }
 
-.error-msg {
-    color: #dc3545;
-    margin-top: 15px;
-    font-size: 14px;
-}
+        .error-msg {
+            color: #dc3545;
+            margin-top: 15px;
+            font-size: 14px;
+        }
 
-/* ========== التطبيق الرئيسي ========== */
-.main-app {
-    display: none;
-    max-width: 1300px;
-    margin: auto;
-}
+        /* ========== التطبيق الرئيسي ========== */
+        .main-app {
+            display: none;
+            max-width: 1300px;
+            margin: auto;
+        }
 
-/* الهيدر الأنيق */
-.glass-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border-radius: 70px;
-    padding: 18px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 35px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 215, 0, 0.3);
-}
+        /* الهيدر الأنيق */
+        .glass-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-radius: 70px;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
 
-.welcome-box h2 {
-    color: #2d6a4f;
-    font-size: 24px;
-}
+        .welcome-box h2 {
+            color: #2d6a4f;
+            font-size: 24px;
+        }
 
-.welcome-box p {
-    color: #8a9c8a;
-    font-size: 13px;
-}
+        .welcome-box p {
+            color: #8a9c8a;
+            font-size: 13px;
+        }
 
-.trash-btn {
-    background: linear-gradient(145deg, #dc3545, #b52b3a);
-    border: none;
-    border-radius: 60px;
-    padding: 14px 28px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    transition: 0.2s;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
+        .trash-btn {
+            background: linear-gradient(145deg, #dc3545, #b52b3a);
+            border: none;
+            border-radius: 60px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
 
-.trash-btn:active {
-    transform: scale(0.96);
-}
+        .trash-btn:active {
+            transform: scale(0.96);
+        }
 
-/* الزرارين الكبار */
-.hero-buttons {
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    margin-bottom: 45px;
-    flex-wrap: wrap;
-}
+        /* الزرارين الكبار */
+        .hero-buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
+        }
 
-.hero-btn {
-    flex: 1;
-    min-width: 260px;
-    background: linear-gradient(145deg, #ffffff, #f8f5f0);
-    border: none;
-    border-radius: 80px;
-    padding: 45px 20px;
-    font-size: 28px;
-    font-weight: bold;
-    color: #2d5a3b;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    border-bottom: 5px solid #ffb347;
-}
+        .hero-btn {
+            flex: 1;
+            min-width: 260px;
+            background: linear-gradient(145deg, #ffffff, #f8f5f0);
+            border: none;
+            border-radius: 80px;
+            padding: 45px 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #2d5a3b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            border-bottom: 5px solid #ffb347;
+        }
 
-.hero-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25);
-}
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25);
+        }
 
-.hero-btn:active {
-    transform: translateY(2px);
-}
+        .hero-btn:active {
+            transform: translateY(2px);
+        }
 
-/* اللوحات */
-.panel {
-    background: rgba(255, 255, 255, 0.97);
-    border-radius: 60px;
-    padding: 35px;
-    margin-top: 25px;
-    display: none;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    animation: fadeIn 0.4s ease;
-}
+        /* اللوحات */
+        .panel {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 60px;
+            padding: 35px;
+            margin-top: 25px;
+            display: none;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            animation: fadeIn 0.4s ease;
+        }
 
-.panel.active {
-    display: block;
-}
+        .panel.active {
+            display: block;
+        }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.98); }
-    to { opacity: 1; transform: scale(1); }
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-.panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
 
-.panel-header h3 {
-    color: #2d6a4f;
-    font-size: 28px;
-    border-right: 6px solid #ffb347;
-    padding-right: 18px;
-}
+        .panel-header h3 {
+            color: #2d6a4f;
+            font-size: 28px;
+            border-right: 6px solid #ffb347;
+            padding-right: 18px;
+        }
 
-/* نموذج الإدخال */
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 25px;
-}
+        /* نموذج الإدخال */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-}
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
 
-.input-group label {
-    font-weight: bold;
-    color: #3a6b5a;
-    margin-bottom: 10px;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+        .input-group label {
+            font-weight: bold;
+            color: #3a6b5a;
+            margin-bottom: 10px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-.input-group input {
-    padding: 14px 18px;
-    font-size: 16px;
-    border-radius: 50px;
-    border: 2px solid #e8e0d0;
-    background: white;
-    transition: 0.2s;
-}
+        .input-group input {
+            padding: 14px 18px;
+            font-size: 16px;
+            border-radius: 50px;
+            border: 2px solid #e8e0d0;
+            background: white;
+            transition: 0.2s;
+        }
 
-.input-group input:focus {
-    border-color: #ffb347;
-    outline: none;
-    box-shadow: 0 0 0 3px #ffb34733;
-}
+        .input-group input:focus {
+            border-color: #ffb347;
+            outline: none;
+            box-shadow: 0 0 0 3px #ffb34733;
+        }
 
-.calc-card {
-    background: linear-gradient(135deg, #eef7f2, #e3f0e9);
-    border-radius: 50px;
-    padding: 20px 25px;
-    margin: 25px 0;
-    text-align: center;
-    border: 1px solid #c8e0d4;
-}
+        .calc-card {
+            background: linear-gradient(135deg, #eef7f2, #e3f0e9);
+            border-radius: 50px;
+            padding: 20px 25px;
+            margin: 25px 0;
+            text-align: center;
+            border: 1px solid #c8e0d4;
+        }
 
-.calc-card h4 {
-    color: #2d6a4f;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+        .calc-card h4 {
+            color: #2d6a4f;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
 
-.calc-card .return-amount {
-    font-size: 32px;
-    font-weight: 800;
-    color: #ff8c42;
-}
+        .calc-card .return-amount {
+            font-size: 32px;
+            font-weight: 800;
+            color: #ff8c42;
+        }
 
-.submit-btn {
-    background: linear-gradient(145deg, #2d6a4f, #1e5a45);
-    color: white;
-    border: none;
-    border-radius: 60px;
-    padding: 16px 30px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    transition: 0.2s;
-    margin-top: 10px;
-}
+        .submit-btn {
+            background: linear-gradient(145deg, #2d6a4f, #1e5a45);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
 
-.submit-btn:active {
-    transform: scale(0.98);
-}
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
 
-.back-btn {
-    background: #9eaa9a;
-    color: white;
-    border: none;
-    border-radius: 50px;
-    padding: 10px 24px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.2s;
-}
+        .back-btn {
+            background: #9eaa9a;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-.back-btn:active {
-    transform: scale(0.96);
-}
+        .back-btn:active {
+            transform: scale(0.96);
+        }
 
-/* الجداول */
-.table-wrapper {
-    overflow-x: auto;
-    border-radius: 40px;
-    background: white;
-    margin-top: 20px;
-}
+        /* الجداول */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 40px;
+            background: white;
+            margin-top: 20px;
+        }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 700px;
-}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
 
-th {
-    background: linear-gradient(145deg, #2d6a4f, #236249);
-    color: white;
-    padding: 18px 12px;
-    font-weight: bold;
-    font-size: 15px;
-}
+        th {
+            background: linear-gradient(145deg, #2d6a4f, #236249);
+            color: white;
+            padding: 18px 12px;
+            font-weight: bold;
+            font-size: 15px;
+        }
 
-td {
-    padding: 14px 10px;
-    text-align: center;
-    border-bottom: 1px solid #f0e6dc;
-    color: #2c3e2b;
-}
+        td {
+            padding: 14px 10px;
+            text-align: center;
+            border-bottom: 1px solid #f0e6dc;
+            color: #2c3e2b;
+        }
 
-tr:hover {
-    background: #fffaf2;
-}
+        tr:hover {
+            background: #fffaf2;
+        }
 
-.action-btn {
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 35px;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-    transition: 0.2s;
-}
+        .action-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 35px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
 
-.action-btn:active {
-    transform: scale(0.95);
-}
+        .action-btn:active {
+            transform: scale(0.95);
+        }
 
-.restore-btn {
-    background: #ffb347;
-    color: #2b2b2b;
-}
+        .restore-btn {
+            background: #ffb347;
+            color: #2b2b2b;
+        }
 
-.total-row {
-    background: #f5f0e8;
-    font-weight: bold;
-}
+        .total-row {
+            background: #f5f0e8;
+            font-weight: bold;
+        }
 
-/* رسائل التنبيه */
-.toast {
-    position: fixed;
-    bottom: 30px;
-    left: 20px;
-    right: 20px;
-    background: #1e3d36e6;
-    backdrop-filter: blur(12px);
-    color: #ffefcf;
-    text-align: center;
-    padding: 16px;
-    border-radius: 60px;
-    font-size: 16px;
-    font-weight: bold;
-    z-index: 1200;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.25s;
-    letter-spacing: 0.5px;
-}
+        /* رسائل التنبيه */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 20px;
+            right: 20px;
+            background: #1e3d36e6;
+            backdrop-filter: blur(12px);
+            color: #ffefcf;
+            text-align: center;
+            padding: 16px;
+            border-radius: 60px;
+            font-size: 16px;
+            font-weight: bold;
+            z-index: 1200;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+            letter-spacing: 0.5px;
+        }
 
-/* استجابة للشاشات الصغيرة */
-@media (max-width: 650px) {
-    .hero-btn { 
-        padding: 30px 15px; 
-        font-size: 22px; 
-    }
-    .panel { 
-        padding: 20px; 
-    }
-    .glass-header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-    .panel-header {
-        flex-direction: column;
-        gap: 15px;
-    }
-}
+        /* استجابة للشاشات الصغيرة */
+        @media (max-width: 650px) {
+            .hero-btn { 
+                padding: 30px 15px; 
+                font-size: 22px; 
+            }
+            .panel { 
+                padding: 20px; 
+            }
+            .glass-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .panel-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>
 
-<!-- شاشة تسجيل الدخول -->
+<!-- شاشة الدخول -->
 <div id="loginScreen" class="login-screen">
-    <div class="login-box">
-        <h1>📜 شهاداتي</h1>
-        <p>نظام إدارة الشهادات الاستثمارية</p>
-        <input type="text" id="loginName" placeholder="الاسم" value="أخد">
-        <input type="password" id="loginPass" placeholder="كلمة السر">
-        <button class="login-btn" onclick="checkLogin()">دخول 🔓</button>
+    <div class="login-card">
+        <h1>📜 <span>شهاداتي</span></h1>
+        <p>نظام متطور لإدارة الشهادات الاستثمارية</p>
+        <input type="text" id="loginName" placeholder="👤 اسم المستخدم" value="أخد">
+        <input type="password" id="loginPass" placeholder="🔒 كلمة السر">
+        <button class="login-btn" onclick="checkLogin()">🔓 دخول إلى المنصة</button>
         <div id="loginError" class="error-msg"></div>
     </div>
 </div>
 
 <!-- التطبيق الرئيسي -->
 <div id="mainApp" class="main-app">
-    <div class="header">
-        <h2>📊 مرحباً <span id="userName">أخد</span></h2>
+    <div class="glass-header">
+        <div class="welcome-box">
+            <h2>📊 مرحباً <span id="userName">أخد</span></h2>
+            <p>لوحة تحكم الشهادات الاستثمارية</p>
+        </div>
         <button class="trash-btn" onclick="showTrash()">🗑️ سلة المحذوفات</button>
     </div>
 
-    <!-- الزرارين الكبار -->
-    <div class="big-buttons">
-        <button class="big-btn" onclick="showAddForm()">➕ إضافة شهادة جديدة</button>
-        <button class="big-btn" onclick="showKashf()">📋 كشف الحساب</button>
+    <!-- زرارين رئيسيين -->
+    <div class="hero-buttons">
+        <button class="hero-btn" onclick="showAddForm()">➕ إضافة شهادة جديدة</button>
+        <button class="hero-btn" onclick="showKashf()">📋 كشف الحساب</button>
     </div>
 
     <!-- لوحة إضافة شهادة -->
-    <div id="addPanel" class="form-panel">
-        <h3 style="color:#2d5a3b; margin-bottom:20px;">➕ إدخال شهادة جديدة</h3>
-        <div class="form-grid">
-            <div class="form-group"><label>📅 تاريخ الشراء</label><input type="date" id="purchaseDate"></div>
-            <div class="form-group"><label>🔢 رقم الشهادة</label><input type="text" id="certNumber" placeholder="رقم الشهادة"></div>
-            <div class="form-group"><label>💰 مبلغ الشهادة (ج.م)</label><input type="number" id="certAmount" placeholder="المبلغ" oninput="calculateReturn()"></div>
-            <div class="form-group"><label>📆 تاريخ الاستحقاق</label><input type="date" id="dueDate"></div>
-            <div class="form-group"><label>📈 معدل العائد (%)</label><input type="number" id="interestRate" placeholder="مثال: 12.5" step="any" oninput="calculateReturn()"></div>
+    <div id="addPanel" class="panel">
+        <div class="panel-header">
+            <h3>➕ إدخال شهادة جديدة</h3>
+            <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
         </div>
-        <div class="calc-result" id="returnResult">💰 مبلغ العائد: 0.00 ج.م</div>
+        <div class="form-grid">
+            <div class="input-group"><label>📅 تاريخ الشراء</label><input type="date" id="purchaseDate"></div>
+            <div class="input-group"><label>🔢 رقم الشهادة</label><input type="text" id="certNumber" placeholder="مثال: 221105"></div>
+            <div class="input-group"><label>💰 مبلغ الشهادة (ج.م)</label><input type="number" id="certAmount" placeholder="المبلغ" oninput="calculateReturn()"></div>
+            <div class="input-group"><label>📆 تاريخ الاستحقاق</label><input type="date" id="dueDate"></div>
+            <div class="input-group"><label>📈 معدل العائد السنوي (%)</label><input type="number" id="interestRate" placeholder="مثال: 12.5" step="any" oninput="calculateReturn()"></div>
+        </div>
+        <div class="calc-card">
+            <h4>💰 مبلغ العائد الشهري</h4>
+            <div class="return-amount" id="returnResult">0.00 ج.م</div>
+            <small>*يحسب تلقائياً: (مبلغ الشهادة × معدل العائد) ÷ 1200</small>
+        </div>
         <button class="submit-btn" onclick="addCertificate()">✅ حفظ الشهادة</button>
-        <button class="back-btn" style="margin-top:15px; width:100%;" onclick="hideAllPanels()">🔙 رجوع</button>
     </div>
 
-    <!-- لوحة كشف الحساب (جدول الشهادات) -->
-    <div id="kashfPanel" class="kashf-panel">
-        <h3 style="color:#2d5a3b; margin-bottom:20px;">📋 كشف حساب الشهادات</h3>
-        <button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button>
+    <!-- لوحة كشف الحساب -->
+    <div id="kashfPanel" class="panel">
+        <div class="panel-header">
+            <h3>📋 كشف حساب الشهادات</h3>
+            <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
+        </div>
         <div class="table-wrapper">
             <table id="certificatesTable">
                 <thead>
@@ -480,9 +491,11 @@ tr:hover {
     </div>
 
     <!-- لوحة سلة المحذوفات -->
-    <div id="trashPanel" class="trash-panel">
-        <h3 style="color:#2d5a3b; margin-bottom:20px;">🗑️ سلة المحذوفات</h3>
-        <button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button>
+    <div id="trashPanel" class="panel">
+        <div class="panel-header">
+            <h3>🗑️ سلة المحذوفات المؤقتة</h3>
+            <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
+        </div>
         <div class="table-wrapper">
             <table>
                 <thead><tr><th>رقم الشهادة</th><th>مبلغ الشهادة</th><th>تاريخ الحذف</th><th>إجراء</th></tr></thead>
@@ -495,11 +508,9 @@ tr:hover {
 <div id="toastMsg" class="toast"></div>
 
 <script>
-    // ============= البيانات =============
     let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
     let trash = JSON.parse(localStorage.getItem('certificatesTrash')) || [];
 
-    // ============= دوال مساعدة =============
     function showToast(msg) {
         let toast = document.getElementById('toastMsg');
         toast.textContent = msg;
@@ -511,20 +522,18 @@ tr:hover {
         }, 2200);
     }
 
-    // حساب مبلغ العائد
     function calculateReturn() {
         let amount = parseFloat(document.getElementById('certAmount').value);
         let rate = parseFloat(document.getElementById('interestRate').value);
         if (isNaN(amount) || isNaN(rate) || amount <= 0 || rate <= 0) {
-            document.getElementById('returnResult').innerHTML = '💰 مبلغ العائد: 0.00 ج.م';
+            document.getElementById('returnResult').innerHTML = '0.00 ج.م';
             return 0;
         }
         let returnAmount = (amount * rate) / 1200;
-        document.getElementById('returnResult').innerHTML = `💰 مبلغ العائد: ${returnAmount.toFixed(2)} ج.م`;
+        document.getElementById('returnResult').innerHTML = `${returnAmount.toFixed(2)} ج.م`;
         return returnAmount;
     }
 
-    // إضافة شهادة جديدة
     window.addCertificate = function() {
         let purchaseDate = document.getElementById('purchaseDate').value;
         let certNumber = document.getElementById('certNumber').value.trim();
@@ -533,10 +542,9 @@ tr:hover {
         let interestRate = parseFloat(document.getElementById('interestRate').value);
 
         if (!purchaseDate || !certNumber || isNaN(certAmount) || certAmount <= 0 || !dueDate || isNaN(interestRate) || interestRate <= 0) {
-            alert('الرجاء ملء جميع الحقول بشكل صحيح');
+            alert('❌ الرجاء ملء جميع الحقول بشكل صحيح');
             return;
         }
-
         let returnAmount = (certAmount * interestRate) / 1200;
         let newCert = {
             id: Date.now(),
@@ -551,27 +559,22 @@ tr:hover {
         certificates.push(newCert);
         localStorage.setItem('certificates', JSON.stringify(certificates));
         showToast(`✅ تم إضافة الشهادة رقم ${certNumber}`);
-        
-        // تفريغ الحقول
         document.getElementById('purchaseDate').value = '';
         document.getElementById('certNumber').value = '';
         document.getElementById('certAmount').value = '';
         document.getElementById('dueDate').value = '';
         document.getElementById('interestRate').value = '';
-        document.getElementById('returnResult').innerHTML = '💰 مبلغ العائد: 0.00 ج.م';
-        
+        document.getElementById('returnResult').innerHTML = '0.00 ج.م';
         renderKashf();
         hideAllPanels();
         showKashf();
     };
 
-    // حذف شهادة (نقلها إلى سلة المحذوفات)
     window.deleteCertificate = function(id) {
         let index = certificates.findIndex(c => c.id == id);
         if (index !== -1) {
             let deleted = certificates[index];
-            let deletedItem = { ...deleted, deletedDate: new Date().toLocaleDateString('ar-EG') };
-            trash.unshift(deletedItem);
+            trash.unshift({ ...deleted, deletedDate: new Date().toLocaleDateString('ar-EG') });
             certificates.splice(index, 1);
             localStorage.setItem('certificates', JSON.stringify(certificates));
             localStorage.setItem('certificatesTrash', JSON.stringify(trash));
@@ -580,22 +583,19 @@ tr:hover {
         }
     };
 
-    // استعادة شهادة من السلة
     window.restoreFromTrash = function(id) {
         let index = trash.findIndex(t => t.id == id);
         if (index !== -1) {
-            let restored = trash[index];
-            certificates.push(restored);
+            certificates.push(trash[index]);
             trash.splice(index, 1);
             localStorage.setItem('certificates', JSON.stringify(certificates));
             localStorage.setItem('certificatesTrash', JSON.stringify(trash));
             renderKashf();
             renderTrash();
-            showToast(`♻️ تم استعادة الشهادة ${restored.certNumber}`);
+            showToast(`♻️ تم استعادة الشهادة`);
         }
     };
 
-    // حذف نهائي من السلة
     window.permanentDelete = function(id) {
         if (confirm('⚠️ هل أنت متأكد؟ هذا الحذف نهائي ولا يمكن التراجع.')) {
             let index = trash.findIndex(t => t.id == id);
@@ -608,39 +608,34 @@ tr:hover {
         }
     };
 
-    // عرض كشف الحساب (جدول الشهادات)
     function renderKashf() {
         let tbody = document.getElementById('tableBody');
         let tfoot = document.getElementById('tableFooter');
         if (!tbody) return;
         if (certificates.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
+            tbody.innerHTML = '<td><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
             tfoot.innerHTML = '';
             return;
         }
         let html = '';
-        let totalAmount = 0;
-        let totalReturn = 0;
+        let totalAmount = 0, totalReturn = 0;
         for (let c of certificates) {
             totalAmount += c.certAmount;
             totalReturn += parseFloat(c.returnAmount);
-            html += `
-                <tr>
-                    <td>${c.certNumber}</td>
-                    <td>${c.purchaseDate}</td>
-                    <td>${c.certAmount.toLocaleString()} ج.م</td>
-                    <td>${c.dueDate}</td>
-                    <td>${c.interestRate}%</td>
-                    <td>${c.returnAmount} ج.م</td>
-                    <td><button class="action-btn" onclick="deleteCertificate(${c.id})">🗑️ حذف</button></td>
-                </tr>
-            `;
+            html += `<tr>
+                        <td>${c.certNumber}</td>
+                        <td>${c.purchaseDate}</td>
+                        <td>${c.certAmount.toLocaleString()} ج.م</td>
+                        <td>${c.dueDate}</td>
+                        <td>${c.interestRate}%</td>
+                        <td>${c.returnAmount} ج.م</td>
+                        <td><button class="action-btn" onclick="deleteCertificate(${c.id})">🗑️ حذف</button></td>
+                    </tr>`;
         }
         tbody.innerHTML = html;
-        tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
+        tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>📊 الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
     }
 
-    // عرض سلة المحذوفات
     function renderTrash() {
         let trashBody = document.getElementById('trashBody');
         if (!trashBody) return;
@@ -650,43 +645,28 @@ tr:hover {
         }
         let html = '';
         for (let t of trash) {
-            html += `
-                <tr>
-                    <td>${t.certNumber}</td>
-                    <td>${t.certAmount.toLocaleString()} ج.م</td>
-                    <td>${t.deletedDate}</td>
-                    <td><button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button> <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button></td>
-                </tr>
-            `;
+            html += `<tr>
+                        <td>${t.certNumber}</td>
+                        <td>${t.certAmount.toLocaleString()} ج.م</td>
+                        <td>${t.deletedDate}</td>
+                        <td>
+                            <button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button>
+                            <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button>
+                        </td>
+                    </tr>`;
         }
         trashBody.innerHTML = html;
     }
 
-    // ============= التحكم في الشاشات =============
     function hideAllPanels() {
         document.getElementById('addPanel').classList.remove('active');
         document.getElementById('kashfPanel').classList.remove('active');
         document.getElementById('trashPanel').classList.remove('active');
     }
+    window.showAddForm = function() { hideAllPanels(); document.getElementById('addPanel').classList.add('active'); };
+    window.showKashf = function() { renderKashf(); hideAllPanels(); document.getElementById('kashfPanel').classList.add('active'); };
+    window.showTrash = function() { renderTrash(); hideAllPanels(); document.getElementById('trashPanel').classList.add('active'); };
 
-    window.showAddForm = function() {
-        hideAllPanels();
-        document.getElementById('addPanel').classList.add('active');
-    };
-
-    window.showKashf = function() {
-        renderKashf();
-        hideAllPanels();
-        document.getElementById('kashfPanel').classList.add('active');
-    };
-
-    window.showTrash = function() {
-        renderTrash();
-        hideAllPanels();
-        document.getElementById('trashPanel').classList.add('active');
-    };
-
-    // ============= تسجيل الدخول =============
     window.checkLogin = function() {
         let name = document.getElementById('loginName').value.trim();
         let pass = document.getElementById('loginPass').value;
@@ -694,13 +674,11 @@ tr:hover {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('userName').innerText = name;
-            showToast(`مرحباً ${name}`);
-       } else {
-            document.getElementById('loginError').innerText = 'الاسم أو كلمة السر غير صحيحة';
+            showToast(`✨ مرحباً ${name} ✨`);
+        } else {
+            document.getElementById('loginError').innerText = '❌ الاسم أو كلمة السر غير صحيحة';
         }
     };
-
-    // بداية التشغيل
     renderKashf();
 </script>
 </body>
