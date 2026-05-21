@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>📜 منصة إدارة الشهادات الاستثمارية</title>
-    <!-- مكتبات تصدير PDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -21,6 +18,7 @@
             padding: 20px;
         }
 
+        /* شاشة الدخول */
         .login-screen {
             position: fixed;
             top: 0;
@@ -37,13 +35,12 @@
 
         .login-card {
             background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
             border-radius: 80px;
             padding: 50px 40px;
             width: 90%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 40px 60px rgba(0, 0, 0, 0.4);
             animation: fadeInUp 0.6s ease;
         }
 
@@ -57,17 +54,8 @@
             font-size: 38px;
             margin-bottom: 10px;
         }
-
-        .login-card h1 span {
-            color: #ffb347;
-        }
-
-        .login-card p {
-            color: #7c8a7c;
-            margin-bottom: 35px;
-            font-size: 15px;
-        }
-
+        .login-card h1 span { color: #ffb347; }
+        .login-card p { color: #7c8a7c; margin-bottom: 35px; font-size: 15px; }
         .login-card input {
             width: 100%;
             padding: 16px 20px;
@@ -76,16 +64,8 @@
             border-radius: 60px;
             border: 2px solid #e0e0e0;
             background: #f9f9f9;
-            transition: 0.2s;
             text-align: center;
         }
-
-        .login-card input:focus {
-            border-color: #ffb347;
-            outline: none;
-            box-shadow: 0 0 0 4px #ffb34733;
-        }
-
         .login-btn {
             background: linear-gradient(145deg, #2d6a4f, #1e5a45);
             color: white;
@@ -97,29 +77,15 @@
             width: 100%;
             cursor: pointer;
             margin-top: 20px;
-            transition: 0.2s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
+        .error-msg { color: #dc3545; margin-top: 15px; font-size: 14px; }
 
-        .login-btn:active {
-            transform: scale(0.97);
-        }
+        /* التطبيق الرئيسي */
+        .main-app { display: none; max-width: 1300px; margin: auto; }
 
-        .error-msg {
-            color: #dc3545;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .main-app {
-            display: none;
-            max-width: 1300px;
-            margin: auto;
-        }
-
+        /* الهيدر */
         .glass-header {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
             border-radius: 70px;
             padding: 18px 30px;
             display: flex;
@@ -127,19 +93,8 @@
             align-items: center;
             margin-bottom: 35px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 215, 0, 0.3);
         }
-
-        .welcome-box h2 {
-            color: #2d6a4f;
-            font-size: 24px;
-        }
-
-        .welcome-box p {
-            color: #8a9c8a;
-            font-size: 13px;
-        }
-
+        .welcome-box h2 { color: #2d6a4f; font-size: 24px; }
         .trash-btn {
             background: linear-gradient(145deg, #dc3545, #b52b3a);
             border: none;
@@ -152,14 +107,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .trash-btn:active {
-            transform: scale(0.96);
-        }
-
+        /* الأزرار الكبيرة */
         .hero-buttons {
             display: flex;
             gap: 30px;
@@ -167,7 +117,6 @@
             margin-bottom: 45px;
             flex-wrap: wrap;
         }
-
         .hero-btn {
             flex: 1;
             min-width: 260px;
@@ -179,21 +128,12 @@
             font-weight: bold;
             color: #2d5a3b;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
             border-bottom: 5px solid #ffb347;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .hero-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.25);
-        }
-
-        .hero-btn:active {
-            transform: translateY(2px);
-        }
-
+        /* اللوحات */
         .panel {
             background: rgba(255, 255, 255, 0.97);
             border-radius: 60px;
@@ -201,17 +141,9 @@
             margin-top: 25px;
             display: none;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            animation: fadeIn 0.4s ease;
         }
-
-        .panel.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        .panel.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .panel-header {
             display: flex;
@@ -220,7 +152,6 @@
             margin-bottom: 30px;
             flex-wrap: wrap;
         }
-
         .panel-header h3 {
             color: #2d6a4f;
             font-size: 28px;
@@ -228,63 +159,37 @@
             padding-right: 18px;
         }
 
+        /* النماذج */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 25px;
         }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
+        .input-group { display: flex; flex-direction: column; }
         .input-group label {
             font-weight: bold;
             color: #3a6b5a;
             margin-bottom: 10px;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-
         .input-group input {
             padding: 14px 18px;
             font-size: 16px;
             border-radius: 50px;
             border: 2px solid #e8e0d0;
             background: white;
-            transition: 0.2s;
         }
-
-        .input-group input:focus {
-            border-color: #ffb347;
-            outline: none;
-            box-shadow: 0 0 0 3px #ffb34733;
-        }
-
         .calc-card {
             background: linear-gradient(135deg, #eef7f2, #e3f0e9);
             border-radius: 50px;
             padding: 20px 25px;
             margin: 25px 0;
             text-align: center;
-            border: 1px solid #c8e0d4;
         }
-
-        .calc-card h4 {
-            color: #2d6a4f;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
         .calc-card .return-amount {
             font-size: 32px;
             font-weight: 800;
             color: #ff8c42;
         }
-
         .submit-btn {
             background: linear-gradient(145deg, #2d6a4f, #1e5a45);
             color: white;
@@ -295,81 +200,41 @@
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            transition: 0.2s;
-            margin-top: 10px;
         }
-
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-
-        .back-btn {
-            background: #9eaa9a;
-            color: white;
+        .back-btn, .export-btn {
             border: none;
             border-radius: 50px;
             padding: 10px 24px;
             font-size: 16px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .back-btn:active {
-            transform: scale(0.96);
-        }
-
-        .export-btn {
-            background: linear-gradient(145deg, #e0a52a, #c47a2e);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 28px;
-            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.2s;
             margin-left: 15px;
         }
+        .back-btn { background: #9eaa9a; color: white; }
+        .export-btn { background: #e0a52a; color: white; }
 
-        .export-btn:active {
-            transform: scale(0.96);
-        }
-
+        /* الجداول */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 40px;
             background: white;
             margin-top: 20px;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             min-width: 700px;
         }
-
         th {
             background: linear-gradient(145deg, #2d6a4f, #236249);
             color: white;
             padding: 18px 12px;
-            font-weight: bold;
-            font-size: 15px;
         }
-
         td {
             padding: 14px 10px;
             text-align: center;
             border-bottom: 1px solid #f0e6dc;
-            color: #2c3e2b;
         }
-
-        tr:hover {
-            background: #fffaf2;
-        }
-
         .action-btn {
             background: #dc3545;
             color: white;
@@ -377,110 +242,129 @@
             border-radius: 35px;
             padding: 8px 16px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            transition: 0.2s;
         }
-
-        .action-btn:active {
-            transform: scale(0.95);
-        }
-
-        .restore-btn {
-            background: #ffb347;
-            color: #2b2b2b;
-        }
-
-        .total-row {
-            background: #f5f0e8;
-            font-weight: bold;
-        }
-
+        .restore-btn { background: #ffb347; color: #2b2b2b; }
+        .total-row { background: #f5f0e8; font-weight: bold; }
         .toast {
             position: fixed;
             bottom: 30px;
             left: 20px;
             right: 20px;
             background: #1e3d36e6;
-            backdrop-filter: blur(12px);
             color: #ffefcf;
             text-align: center;
             padding: 16px;
             border-radius: 60px;
-            font-size: 16px;
-            font-weight: bold;
             z-index: 1200;
             opacity: 0;
             visibility: hidden;
             transition: 0.25s;
-            letter-spacing: 0.5px;
         }
 
-        /* حاوية التقرير المخفية للتصدير */
-        .report-container {
-            position: absolute;
-            left: -9999px;
-            top: 0;
-            width: 1100px;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            font-family: 'Segoe UI', 'Tajawal', 'Cairo', sans-serif;
+        /* ========== أنماط الطباعة على مقاس A4 ========== */
+        @media print {
+            /* إخفاء عناصر الواجهة */
+            .login-screen, .glass-header, .hero-buttons, .panel-header .back-btn, 
+            .panel-header .export-btn, .action-btn, .trash-btn, .toast,
+            .submit-btn, .calc-card, .form-grid, .add-form, #addPanel {
+                display: none !important;
+            }
+            
+            /* ضبط الصفحة */
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .main-app {
+                display: block !important;
+                margin: 0;
+                padding: 0;
+            }
+            
+            /* إظهار لوحة كشف الحساب فقط */
+            #kashfPanel {
+                display: block !important;
+                background: white;
+                padding: 0;
+                margin: 0;
+                box-shadow: none;
+                border-radius: 0;
+            }
+            
+            /* ضبط الجدول ليلائم A4 */
+            .table-wrapper {
+                overflow: visible;
+                margin: 0;
+                padding: 0;
+            }
+            
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 12px;
+            }
+            
+            th, td {
+                border: 1px solid #aaa;
+                padding: 8px 6px;
+            }
+            
+            th {
+                background: #2d6a4f;
+                color: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .total-row {
+                background: #f5f0e8;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            /* إضافة رأس وتذييل للطباعة */
+            @page {
+                size: A4;
+                margin: 1.5cm;
+            }
+            
+            /* عنوان التقرير يظهر فقط عند الطباعة */
+            .print-header {
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #2d6a4f;
+            }
+            
+            .print-header h1 {
+                color: #2d6a4f;
+                font-size: 24px;
+                margin-bottom: 5px;
+            }
+            
+            .print-header p {
+                color: #666;
+                font-size: 12px;
+                margin: 3px 0;
+            }
+            
+            .print-footer {
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                padding-top: 10px;
+                border-top: 1px solid #ddd;
+                font-size: 10px;
+                color: #888;
+            }
         }
-
-        .report-container h1 {
-            color: #2d6a4f;
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
-        .report-container .report-date {
-            text-align: center;
-            color: #7c8a7c;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .report-container table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        .report-container th {
-            background: #2d6a4f;
-            color: white;
-            padding: 12px;
-            font-size: 14px;
-        }
-
-        .report-container td {
-            padding: 10px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            font-size: 13px;
-        }
-
-        .report-container .total-row {
-            background: #f5f0e8;
-            font-weight: bold;
-        }
-
-        .report-footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            font-size: 12px;
-            color: #888;
-        }
-
-        @media (max-width: 650px) {
-            .hero-btn { padding: 30px 15px; font-size: 22px; }
-            .panel { padding: 20px; }
-            .glass-header { flex-direction: column; gap: 15px; text-align: center; }
-            .panel-header { flex-direction: column; gap: 15px; }
+        
+        /* إخفاء رأس وتذييل الطباعة في الشاشة العادية */
+        .print-header, .print-footer {
+            display: none;
         }
     </style>
 </head>
@@ -493,7 +377,7 @@
         <p>نظام متطور لإدارة الشهادات الاستثمارية</p>
         <input type="text" id="loginName" placeholder="👤 اسم المستخدم" value="أخد">
         <input type="password" id="loginPass" placeholder="🔒 كلمة السر">
-        <button class="login-btn" onclick="checkLogin()">🔓 دخول إلى المنصة</button>
+        <button class="login-btn" onclick="checkLogin()">🔓 دخول</button>
         <div id="loginError" class="error-msg"></div>
     </div>
 </div>
@@ -501,71 +385,63 @@
 <!-- التطبيق الرئيسي -->
 <div id="mainApp" class="main-app">
     <div class="glass-header">
-        <div class="welcome-box">
-            <h2>📊 مرحباً <span id="userName">أخد</span></h2>
-            <p>لوحة تحكم الشهادات الاستثمارية</p>
-        </div>
+        <div class="welcome-box"><h2>📊 مرحباً <span id="userName">أخد</span></h2></div>
         <button class="trash-btn" onclick="showTrash()">🗑️ سلة المحذوفات</button>
     </div>
 
     <div class="hero-buttons">
-        <button class="hero-btn" onclick="showAddForm()">➕ إضافة شهادة جديدة</button>
+        <button class="hero-btn" onclick="showAddForm()">➕ إضافة شهادة</button>
         <button class="hero-btn" onclick="showKashf()">📋 كشف الحساب</button>
     </div>
 
+    <!-- إضافة شهادة -->
     <div id="addPanel" class="panel">
         <div class="panel-header">
             <h3>➕ إدخال شهادة جديدة</h3>
-            <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
+            <button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button>
         </div>
         <div class="form-grid">
             <div class="input-group"><label>📅 تاريخ الشراء</label><input type="date" id="purchaseDate"></div>
-            <div class="input-group"><label>🔢 رقم الشهادة</label><input type="text" id="certNumber" placeholder="مثال: 221105"></div>
-            <div class="input-group"><label>💰 مبلغ الشهادة (ج.م)</label><input type="number" id="certAmount" placeholder="المبلغ" oninput="calculateReturn()"></div>
+            <div class="input-group"><label>🔢 رقم الشهادة</label><input type="text" id="certNumber"></div>
+            <div class="input-group"><label>💰 مبلغ الشهادة</label><input type="number" id="certAmount" oninput="calculateReturn()"></div>
             <div class="input-group"><label>📆 تاريخ الاستحقاق</label><input type="date" id="dueDate"></div>
-            <div class="input-group"><label>📈 معدل العائد السنوي (%)</label><input type="number" id="interestRate" placeholder="مثال: 12.5" step="any" oninput="calculateReturn()"></div>
+            <div class="input-group"><label>📈 معدل العائد %</label><input type="number" id="interestRate" step="any" oninput="calculateReturn()"></div>
         </div>
-        <div class="calc-card">
-            <h4>💰 مبلغ العائد الشهري</h4>
-            <div class="return-amount" id="returnResult">0.00 ج.م</div>
-            <small>*يحسب تلقائياً: (مبلغ الشهادة × معدل العائد) ÷ 1200</small>
-        </div>
+        <div class="calc-card"><h4>💰 مبلغ العائد الشهري</h4><div class="return-amount" id="returnResult">0.00 ج.م</div></div>
         <button class="submit-btn" onclick="addCertificate()">✅ حفظ الشهادة</button>
     </div>
 
+    <!-- كشف الحساب -->
     <div id="kashfPanel" class="panel">
         <div class="panel-header">
             <h3>📋 كشف حساب الشهادات</h3>
-            <div>
-                <button class="export-btn" onclick="exportToPDF()">📄 تصدير تقرير PDF</button>
-                <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
-            </div>
+            <div><button class="export-btn" onclick="printReport()">🖨️ طباعة / PDF (A4)</button><button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button></div>
         </div>
-        <div class="table-wrapper">
+        <!-- رأس التقرير للطباعة فقط -->
+        <div class="print-header" id="printHeader">
+            <h1>📜 تقرير الشهادات الاستثمارية</h1>
+            <p id="reportDate"></p>
+            <p id="reportCount"></p>
+        </div>
+        <div class="table-wrapper" id="printArea">
             <table id="certificatesTable">
                 <thead><tr><th>رقم الشهادة</th><th>تاريخ الشراء</th><th>مبلغ الشهادة</th><th>تاريخ الاستحقاق</th><th>معدل العائد</th><th>مبلغ العائد</th><th>إجراء</th></tr></thead>
                 <tbody id="tableBody"></tbody>
                 <tfoot id="tableFooter"></tfoot>
             </table>
         </div>
+        <div class="print-footer">
+            <p>هذا التقرير صادر من منصة شهاداتي - جميع الحقوق محفوظة ©</p>
+            <p>يُقر صاحب التقرير بصحة البيانات المذكورة أعلاه.</p>
+        </div>
     </div>
 
+    <!-- سلة المحذوفات -->
     <div id="trashPanel" class="panel">
-        <div class="panel-header">
-            <h3>🗑️ سلة المحذوفات المؤقتة</h3>
-            <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
-        </div>
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>رقم الشهادة</th><th>مبلغ الشهادة</th><th>تاريخ الحذف</th><th>إجراء</th></tr></thead>
-                <tbody id="trashBody"></tbody>
-            </table>
-        </div>
+        <div class="panel-header"><h3>🗑️ سلة المحذوفات</h3><button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button></div>
+        <div class="table-wrapper"><table><thead><tr><th>رقم الشهادة</th><th>مبلغ الشهادة</th><th>تاريخ الحذف</th><th>إجراء</th></tr></thead><tbody id="trashBody"></tbody></table></div>
     </div>
 </div>
-
-<!-- حاوية التقرير المخفية -->
-<div id="reportContainer" class="report-container"></div>
 
 <div id="toastMsg" class="toast"></div>
 
@@ -578,10 +454,7 @@
         toast.textContent = msg;
         toast.style.opacity = '1';
         toast.style.visibility = 'visible';
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.visibility = 'hidden';
-        }, 2200);
+        setTimeout(() => { toast.style.opacity = '0'; toast.style.visibility = 'hidden'; }, 2200);
     }
 
     function calculateReturn() {
@@ -604,23 +477,14 @@
         let interestRate = parseFloat(document.getElementById('interestRate').value);
 
         if (!purchaseDate || !certNumber || isNaN(certAmount) || certAmount <= 0 || !dueDate || isNaN(interestRate) || interestRate <= 0) {
-            alert('❌ الرجاء ملء جميع الحقول بشكل صحيح');
+            alert('❌ الرجاء ملء جميع الحقول');
             return;
         }
         let returnAmount = (certAmount * interestRate) / 1200;
-        let newCert = {
-            id: Date.now(),
-            purchaseDate,
-            certNumber,
-            certAmount,
-            dueDate,
-            interestRate,
-            returnAmount: returnAmount.toFixed(2),
-            createdAt: new Date().toLocaleDateString('ar-EG')
-        };
+        let newCert = { id: Date.now(), purchaseDate, certNumber, certAmount, dueDate, interestRate, returnAmount: returnAmount.toFixed(2) };
         certificates.push(newCert);
         localStorage.setItem('certificates', JSON.stringify(certificates));
-        showToast(`✅ تم إضافة الشهادة رقم ${certNumber}`);
+        showToast(`✅ تم إضافة الشهادة ${certNumber}`);
         document.getElementById('purchaseDate').value = '';
         document.getElementById('certNumber').value = '';
         document.getElementById('certAmount').value = '';
@@ -641,7 +505,7 @@
             localStorage.setItem('certificates', JSON.stringify(certificates));
             localStorage.setItem('certificatesTrash', JSON.stringify(trash));
             renderKashf();
-            showToast(`🗑️ تم نقل الشهادة ${deleted.certNumber} إلى سلة المحذوفات`);
+            showToast(`🗑️ تم نقل الشهادة ${deleted.certNumber} إلى السلة`);
         }
     };
 
@@ -659,7 +523,7 @@
     };
 
     window.permanentDelete = function(id) {
-        if (confirm('⚠️ هل أنت متأكد؟ هذا الحذف نهائي ولا يمكن التراجع.')) {
+        if (confirm('⚠️ حذف نهائي؟ لا يمكن التراجع.')) {
             let index = trash.findIndex(t => t.id == id);
             if (index !== -1) {
                 trash.splice(index, 1);
@@ -679,8 +543,7 @@
             tfoot.innerHTML = '';
             return;
         }
-        let html = '';
-        let totalAmount = 0, totalReturn = 0;
+        let html = '', totalAmount = 0, totalReturn = 0;
         for (let c of certificates) {
             totalAmount += c.certAmount;
             totalReturn += parseFloat(c.returnAmount);
@@ -692,154 +555,42 @@
                         <td>${c.interestRate}%</td>
                         <td>${c.returnAmount} ج.م</td>
                         <td><button class="action-btn" onclick="deleteCertificate(${c.id})">🗑️ حذف</button></td>
-                    </tr>`;
+                     </tr>`;
         }
         tbody.innerHTML = html;
-        tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>📊 الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
+        tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
+        
+        // تحديث رأس التقرير للطباعة
+        let now = new Date();
+        let dateStr = now.toLocaleDateString('ar-EG');
+        let timeStr = now.toLocaleTimeString('ar-EG');
+        document.getElementById('reportDate').innerHTML = `تاريخ التقرير: ${dateStr} - وقت الإنشاء: ${timeStr}`;
+        document.getElementById('reportCount').innerHTML = `عدد الشهادات المسجلة: ${certificates.length} شهادة`;
     }
 
     function renderTrash() {
         let trashBody = document.getElementById('trashBody');
         if (!trashBody) return;
-        if (trash.length === 0) {
-            trashBody.innerHTML = '<td><td colspan="4" style="text-align:center;">🗑️ السلة فارغة</td></tr>';
-            return;
-        }
+        if (trash.length === 0) { trashBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">🗑️ السلة فارغة</td></tr>'; return; }
         let html = '';
         for (let t of trash) {
             html += `<tr>
                         <td>${t.certNumber}</td>
                         <td>${t.certAmount.toLocaleString()} ج.م</td>
                         <td>${t.deletedDate}</td>
-                        <td>
-                            <button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button>
-                            <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button>
-                        </td>
-                    </tr>`;
+                        <td><button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button> <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button></td>
+                     </tr>`;
         }
         trashBody.innerHTML = html;
     }
 
-    // ============= دالة تصدير PDF باستخدام html2canvas =============
-    window.exportToPDF = async function() {
+    // طباعة التقرير
+    window.printReport = function() {
         if (certificates.length === 0) {
-            alert('📭 لا توجد شهادات لتصدير التقرير');
+            alert('لا توجد بيانات للطباعة');
             return;
         }
-
-        showToast('📄 جاري إنشاء التقرير...');
-        
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('ar-EG');
-        const timeStr = now.toLocaleTimeString('ar-EG');
-        
-        // حساب الإجماليات
-        let totalAmount = 0, totalReturn = 0;
-        for (let c of certificates) {
-            totalAmount += c.certAmount;
-            totalReturn += parseFloat(c.returnAmount);
-        }
-        
-        // إنشاء محتوى التقرير HTML
-        let reportHTML = `
-            <div style="font-family: 'Segoe UI', 'Tajawal', 'Cairo', sans-serif; padding: 20px; direction: rtl;">
-                <div style="text-align: center; border-bottom: 2px solid #2d6a4f; padding-bottom: 15px; margin-bottom: 20px;">
-                    <h1 style="color: #2d6a4f; margin: 0; font-size: 28px;">📜 تقرير الشهادات الاستثمارية</h1>
-                    <p style="color: #7c8a7c; margin: 8px 0 0 0;">تاريخ التقرير: ${dateStr} - وقت الإنشاء: ${timeStr}</p>
-                    <p style="color: #7c8a7c; margin: 5px 0 0 0;">عدد الشهادات المسجلة: ${certificates.length} شهادة</p>
-                </div>
-                
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <thead>
-                        <tr style="background: #2d6a4f; color: white;">
-                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">رقم الشهادة</th>
-                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">تاريخ الشراء</th>
-                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">مبلغ الشهادة</th>
-                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">تاريخ الاستحقاق</th>
-                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">معدل العائد</th>
-                            <th style="padding: 12px; border: 1px solid #ddd; text-align: center;">مبلغ العائد</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-        `;
-        
-        for (let c of certificates) {
-            reportHTML += `
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.certNumber}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.purchaseDate}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.certAmount.toLocaleString()} ج.م</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.dueDate}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.interestRate}%</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${c.returnAmount} ج.م</td>
-                </tr>
-            `;
-        }
-        
-        reportHTML += `
-                    </tbody>
-                    <tfoot>
-                        <tr style="background: #f5f0e8; font-weight: bold;">
-                            <td colspan="2" style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>📊 الإجمالي الكلي</strong></td>
-                            <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>${totalAmount.toLocaleString()} ج.م</strong></td>
-                            <td colspan="2" style="padding: 12px; border: 1px solid #ddd; text-align: center;"></td>
-                            <td style="padding: 12px; border: 1px solid #ddd; text-align: center;"><strong>${totalReturn.toFixed(2)} ج.م</strong></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                
-                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-                    <div style="display: inline-block; width: 200px; margin-top: 20px;">
-                        <div style="border-top: 2px solid #2d6a4f; padding-top: 8px; margin-top: 20px;">
-                            <p style="margin: 0; font-size: 12px; color: #888;">توقيع المستخدم</p>
-                        </div>
-                    </div>
-                    <p style="font-size: 12px; color: #888; margin-top: 20px;">يُقر صاحب التقرير بصحة البيانات المذكورة أعلاه.</p>
-                    <p style="font-size: 12px; color: #888;">هذا التقرير صادر من منصة شهاداتي - جميع الحقوق محفوظة ©</p>
-                </div>
-            </div>
-        `;
-        
-        // وضع التقرير في الحاوية المخفية
-        const reportContainer = document.getElementById('reportContainer');
-        reportContainer.innerHTML = reportHTML;
-        
-        // استخدام html2canvas لتحويل التقرير إلى صورة
-        const element = reportContainer.firstElementChild;
-        const canvas = await html2canvas(element, {
-            scale: 2,
-            backgroundColor: '#ffffff',
-            logging: false
-        });
-        
-        const imgData = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
-        const imgWidth = 280; // عرض الصورة بالملليمتر
-        const pageHeight = 297; // ارتفاع صفحة A4
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        let pdf = new jsPDF('p', 'mm', 'a4');
-        let position = 0;
-        
-        pdf.addImage(imgData, 'PNG', 15, position, imgWidth, imgHeight);
-        
-        // إذا كانت الصورة أطول من صفحة، أضف صفحة جديدة
-        let heightLeft = imgHeight;
-        let pageNumber = 1;
-        while (heightLeft >= pageHeight - 20) {
-            position = heightLeft - (pageHeight - 20);
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 15, -position, imgWidth, imgHeight);
-            heightLeft -= (pageHeight - 20);
-            pageNumber++;
-        }
-        
-        // حفظ الملف
-        const fileName = `تقرير_الشهادات_${dateStr.replace(/\//g, '-')}.pdf`;
-        pdf.save(fileName);
-        
-        // تنظيف الحاوية
-        reportContainer.innerHTML = '';
-        showToast('✅ تم تصدير التقرير بنجاح');
+        window.print();
     };
 
     function hideAllPanels() {
@@ -858,11 +609,12 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('userName').innerText = name;
-            showToast(`✨ مرحباً ${name} ✨`);
+            showToast(`✨ مرحباً ${name}`);
         } else {
-            document.getElementById('loginError').innerText = '❌ الاسم أو كلمة السر غير صحيحة';
+            document.getElementById('loginError').innerText = '❌ اسم المستخدم أو كلمة السر غير صحيحة';
         }
     };
     renderKashf();
 </script>
 </body>
+</html>
