@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>📜 إدارة شهادات الاستثمار</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tajawal', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a472a 0%, #0e2a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* شاشة تسجيل الدخول */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d2b1a, #1a472a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: 0.3s;
+        }
+
+        .login-box {
+            background: #fffef7;
+            border-radius: 60px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+            border: 1px solid #ffd966;
+        }
+
+        .login-box h1 {
+            color: #2d5a3b;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .login-box p {
+            color: #7a8a6e;
+            margin-bottom: 30px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
+            border-radius: 60px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .login-btn {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 14px;
+            font-size: 20px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .login-btn:hover {
+            background: #1e5a45;
+        }
+
+        .error-msg {
+            color: #c73a2b;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* المحتوى الرئيسي (يظهر بعد تسجيل الدخول) */
+        .main-app {
+            display: none;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* الهيدر */
+        .header {
+            background: #fffef7;
+            border-radius: 50px;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .header h2 {
+            color: #2d5a3b;
+            font-size: 24px;
+        }
+
+        .trash-btn {
+            background: #dc3545;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* الزرارين الكبار */
+        .big-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .big-btn {
+            flex: 1;
+            min-width: 220px;
+            background: linear-gradient(145deg, #2d6a4f, #1e5a45);
+            border: none;
+            border-radius: 70px;
+            padding: 35px 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 12px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .big-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* الفورم */
+        .form-panel, .kashf-panel, .trash-panel {
+            background: #fffef7;
+            border-radius: 50px;
+            padding: 25px;
+            margin-top: 20px;
+            display: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .form-panel.active, .kashf-panel.active, .trash-panel.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #2d5a3b;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .form-group input {
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 40px;
+            border: 1px solid #ddd;
+        }
+
+        .calc-result {
+            background: #eef5f2;
+            padding: 12px;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d6a4f;
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            background: #2d6a4f;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 25px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        /* الجداول */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 30px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px 10px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #2d6a4f;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            color: #333;
+        }
+
+        .action-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .restore-btn {
+            background: #ffb347;
+            color: #2b2118;
+        }
+
+        .back-btn {
+            background: #6b5339;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .total-row {
+            background: #f0f7f3;
+            font-weight: bold;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 20px;
+            right: 20px;
+            background: #1e3d36e6;
+            color: #ffdfa5;
+            text-align: center;
+            padding: 14px;
+            border-radius: 60px;
+            font-size: 16px;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.25s;
+        }
+    </style>
+</head>
+<body>
+
+<!-- شاشة تسجيل الدخول -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-box">
+        <h1>📜 شهاداتي</h1>
+        <p>نظام إدارة الشهادات الاستثمارية</p>
+        <input type="text" id="loginName" placeholder="الاسم" value="أخد">
+        <input type="password" id="loginPass" placeholder="كلمة السر">
+        <button class="login-btn" onclick="checkLogin()">دخول 🔓</button>
+        <div id="loginError" class="error-msg"></div>
+    </div>
+</div>
+
+<!-- التطبيق الرئيسي -->
+<div id="mainApp" class="main-app">
+    <div class="header">
+        <h2>📊 مرحباً <span id="userName">أخد</span></h2>
+        <button class="trash-btn" onclick="showTrash()">🗑️ سلة المحذوفات</button>
+    </div>
+
+    <!-- الزرارين الكبار -->
+    <div class="big-buttons">
+        <button class="big-btn" onclick="showAddForm()">➕ إضافة شهادة جديدة</button>
+        <button class="big-btn" onclick="showKashf()">📋 كشف الحساب</button>
+    </div>
+
+    <!-- لوحة إضافة شهادة -->
+    <div id="addPanel" class="form-panel">
+        <h3 style="color:#2d5a3b; margin-bottom:20px;">➕ إدخال شهادة جديدة</h3>
+        <div class="form-grid">
+            <div class="form-group"><label>📅 تاريخ الشراء</label><input type="date" id="purchaseDate"></div>
+            <div class="form-group"><label>🔢 رقم الشهادة</label><input type="text" id="certNumber" placeholder="رقم الشهادة"></div>
+            <div class="form-group"><label>💰 مبلغ الشهادة (ج.م)</label><input type="number" id="certAmount" placeholder="المبلغ" oninput="calculateReturn()"></div>
+            <div class="form-group"><label>📆 تاريخ الاستحقاق</label><input type="date" id="dueDate"></div>
+            <div class="form-group"><label>📈 معدل العائد (%)</label><input type="number" id="interestRate" placeholder="مثال: 12.5" step="any" oninput="calculateReturn()"></div>
+        </div>
+        <div class="calc-result" id="returnResult">💰 مبلغ العائد: 0.00 ج.م</div>
+        <button class="submit-btn" onclick="addCertificate()">✅ حفظ الشهادة</button>
+        <button class="back-btn" style="margin-top:15px; width:100%;" onclick="hideAllPanels()">🔙 رجوع</button>
+    </div>
+
+    <!-- لوحة كشف الحساب (جدول الشهادات) -->
+    <div id="kashfPanel" class="kashf-panel">
+        <h3 style="color:#2d5a3b; margin-bottom:20px;">📋 كشف حساب الشهادات</h3>
+        <button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button>
+        <div class="table-wrapper">
+            <table id="certificatesTable">
+                <thead>
+                    <tr><th>رقم الشهادة</th><th>تاريخ الشراء</th><th>مبلغ الشهادة</th><th>تاريخ الاستحقاق</th><th>معدل العائد</th><th>مبلغ العائد</th><th>إجراء</th></tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+                <tfoot id="tableFooter"></tfoot>
+            </table>
+        </div>
+    </div>
+
+    <!-- لوحة سلة المحذوفات -->
+    <div id="trashPanel" class="trash-panel">
+        <h3 style="color:#2d5a3b; margin-bottom:20px;">🗑️ سلة المحذوفات</h3>
+        <button class="back-btn" onclick="hideAllPanels()">🔙 رجوع</button>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>رقم الشهادة</th><th>مبلغ الشهادة</th><th>تاريخ الحذف</th><th>إجراء</th></tr></thead>
+                <tbody id="trashBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="toastMsg" class="toast"></div>
+
+<script>
+    // ============= البيانات =============
+    let certificates = JSON.parse(localStorage.getItem('certificates')) || [];
+    let trash = JSON.parse(localStorage.getItem('certificatesTrash')) || [];
+
+    // ============= دوال مساعدة =============
+    function showToast(msg) {
+        let toast = document.getElementById('toastMsg');
+        toast.textContent = msg;
+        toast.style.opacity = '1';
+        toast.style.visibility = 'visible';
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.visibility = 'hidden';
+        }, 2200);
+    }
+
+    // حساب مبلغ العائد
+    function calculateReturn() {
+        let amount = parseFloat(document.getElementById('certAmount').value);
+        let rate = parseFloat(document.getElementById('interestRate').value);
+        if (isNaN(amount) || isNaN(rate) || amount <= 0 || rate <= 0) {
+            document.getElementById('returnResult').innerHTML = '💰 مبلغ العائد: 0.00 ج.م';
+            return 0;
+        }
+        let returnAmount = (amount * rate) / 1200;
+        document.getElementById('returnResult').innerHTML = `💰 مبلغ العائد: ${returnAmount.toFixed(2)} ج.م`;
+        return returnAmount;
+    }
+
+    // إضافة شهادة جديدة
+    window.addCertificate = function() {
+        let purchaseDate = document.getElementById('purchaseDate').value;
+        let certNumber = document.getElementById('certNumber').value.trim();
+        let certAmount = parseFloat(document.getElementById('certAmount').value);
+        let dueDate = document.getElementById('dueDate').value;
+        let interestRate = parseFloat(document.getElementById('interestRate').value);
+
+        if (!purchaseDate || !certNumber || isNaN(certAmount) || certAmount <= 0 || !dueDate || isNaN(interestRate) || interestRate <= 0) {
+            alert('الرجاء ملء جميع الحقول بشكل صحيح');
+            return;
+        }
+
+        let returnAmount = (certAmount * interestRate) / 1200;
+        let newCert = {
+            id: Date.now(),
+            purchaseDate,
+            certNumber,
+            certAmount,
+            dueDate,
+            interestRate,
+            returnAmount: returnAmount.toFixed(2),
+            createdAt: new Date().toLocaleDateString('ar-EG')
+        };
+        certificates.push(newCert);
+        localStorage.setItem('certificates', JSON.stringify(certificates));
+        showToast(`✅ تم إضافة الشهادة رقم ${certNumber}`);
+        
+        // تفريغ الحقول
+        document.getElementById('purchaseDate').value = '';
+        document.getElementById('certNumber').value = '';
+        document.getElementById('certAmount').value = '';
+        document.getElementById('dueDate').value = '';
+        document.getElementById('interestRate').value = '';
+        document.getElementById('returnResult').innerHTML = '💰 مبلغ العائد: 0.00 ج.م';
+        
+        renderKashf();
+        hideAllPanels();
+        showKashf();
+    };
+
+    // حذف شهادة (نقلها إلى سلة المحذوفات)
+    window.deleteCertificate = function(id) {
+        let index = certificates.findIndex(c => c.id == id);
+        if (index !== -1) {
+            let deleted = certificates[index];
+            let deletedItem = { ...deleted, deletedDate: new Date().toLocaleDateString('ar-EG') };
+            trash.unshift(deletedItem);
+            certificates.splice(index, 1);
+            localStorage.setItem('certificates', JSON.stringify(certificates));
+            localStorage.setItem('certificatesTrash', JSON.stringify(trash));
+            renderKashf();
+            showToast(`🗑️ تم نقل الشهادة ${deleted.certNumber} إلى سلة المحذوفات`);
+        }
+    };
+
+    // استعادة شهادة من السلة
+    window.restoreFromTrash = function(id) {
+        let index = trash.findIndex(t => t.id == id);
+        if (index !== -1) {
+            let restored = trash[index];
+            certificates.push(restored);
+            trash.splice(index, 1);
+            localStorage.setItem('certificates', JSON.stringify(certificates));
+            localStorage.setItem('certificatesTrash', JSON.stringify(trash));
+            renderKashf();
+            renderTrash();
+            showToast(`♻️ تم استعادة الشهادة ${restored.certNumber}`);
+        }
+    };
+
+    // حذف نهائي من السلة
+    window.permanentDelete = function(id) {
+        if (confirm('⚠️ هل أنت متأكد؟ هذا الحذف نهائي ولا يمكن التراجع.')) {
+            let index = trash.findIndex(t => t.id == id);
+            if (index !== -1) {
+                trash.splice(index, 1);
+                localStorage.setItem('certificatesTrash', JSON.stringify(trash));
+                renderTrash();
+                showToast('🗑️ تم الحذف النهائي');
+            }
+        }
+    };
+
+    // عرض كشف الحساب (جدول الشهادات)
+    function renderKashf() {
+        let tbody = document.getElementById('tableBody');
+        let tfoot = document.getElementById('tableFooter');
+        if (!tbody) return;
+        if (certificates.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
+            tfoot.innerHTML = '';
+            return;
+        }
+        let html = '';
+        let totalAmount = 0;
+        let totalReturn = 0;
+        for (let c of certificates) {
+            totalAmount += c.certAmount;
+            totalReturn += parseFloat(c.returnAmount);
+            html += `
+                <tr>
+                    <td>${c.certNumber}</td>
+                    <td>${c.purchaseDate}</td>
+                    <td>${c.certAmount.toLocaleString()} ج.م</td>
+                    <td>${c.dueDate}</td>
+                    <td>${c.interestRate}%</td>
+                    <td>${c.returnAmount} ج.م</td>
+                    <td><button class="action-btn" onclick="deleteCertificate(${c.id})">🗑️ حذف</button></td>
+                </tr>
+            `;
+        }
+        tbody.innerHTML = html;
+        tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
+    }
+
+    // عرض سلة المحذوفات
+    function renderTrash() {
+        let trashBody = document.getElementById('trashBody');
+        if (!trashBody) return;
+        if (trash.length === 0) {
+            trashBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">🗑️ السلة فارغة</td></tr>';
+            return;
+        }
+        let html = '';
+        for (let t of trash) {
+            html += `
+                <tr>
+                    <td>${t.certNumber}</td>
+                    <td>${t.certAmount.toLocaleString()} ج.م</td>
+                    <td>${t.deletedDate}</td>
+                    <td><button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button> <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button></td>
+                </tr>
+            `;
+        }
+        trashBody.innerHTML = html;
+    }
+
+    // ============= التحكم في الشاشات =============
+    function hideAllPanels() {
+        document.getElementById('addPanel').classList.remove('active');
+        document.getElementById('kashfPanel').classList.remove('active');
+        document.getElementById('trashPanel').classList.remove('active');
+    }
+
+    window.showAddForm = function() {
+        hideAllPanels();
+        document.getElementById('addPanel').classList.add('active');
+    };
+
+    window.showKashf = function() {
+        renderKashf();
+        hideAllPanels();
+        document.getElementById('kashfPanel').classList.add('active');
+    };
+
+    window.showTrash = function() {
+        renderTrash();
+        hideAllPanels();
+        document.getElementById('trashPanel').classList.add('active');
+    };
+
+    // ============= تسجيل الدخول =============
+    window.checkLogin = function() {
+        let name = document.getElementById('loginName').value.trim();
+        let pass = document.getElementById('loginPass').value;
+        if (name === 'احمد' && pass === '181265') {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('userName').innerText = name;
+            showToast(`مرحباً ${name}`);
+       } else {
+            document.getElementById('loginError').innerText = 'الاسم أو كلمة السر غير صحيحة';
+        }
+    };
+
+    // بداية التشغيل
+    renderKashf();
+</script>
+</body>
+</html>
