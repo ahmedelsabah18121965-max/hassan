@@ -453,7 +453,7 @@
     <div class="login-card">
         <h1>📜 <span>شهاداتي</span></h1>
         <p>نظام متطور لإدارة الشهادات الاستثمارية</p>
-        <input type="text" id="loginName" placeholder="👤 اسم المستخدم" value="أخد">
+        <input type="text" id="loginName" placeholder="👤 اسم المستخدم" value="احمد الصباحي">
         <input type="password" id="loginPass" placeholder="🔒 كلمة السر">
         <button class="login-btn" onclick="checkLogin()">🔓 دخول إلى المنصة</button>
         <div id="loginError" class="error-msg"></div>
@@ -800,7 +800,7 @@
     window.checkLogin = function() {
         let name = document.getElementById('loginName').value.trim();
         let pass = document.getElementById('loginPass').value;
-        if (name === 'أخد' && pass === '181265') {
+        if (name === 'احمد الصباحي' && pass === '181265') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('userName').innerText = name;
