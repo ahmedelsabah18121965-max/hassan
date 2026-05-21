@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>📜 منصة إدارة الشهادات الاستثمارية</title>
+    <!-- مكتبات تصدير PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -321,6 +324,27 @@
             transform: scale(0.96);
         }
 
+        /* زر تصدير PDF */
+        .export-btn {
+            background: linear-gradient(145deg, #e0a52a, #c47a2e);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+            margin-left: 15px;
+        }
+
+        .export-btn:active {
+            transform: scale(0.96);
+        }
+
         /* الجداول */
         .table-wrapper {
             overflow-x: auto;
@@ -429,7 +453,7 @@
     <div class="login-card">
         <h1>📜 <span>شهاداتي</span></h1>
         <p>نظام متطور لإدارة الشهادات الاستثمارية</p>
-        <input type="text" id="loginName" placeholder="👤 اسم المستخدم" value="احمد الصباحي">
+        <input type="text" id="loginName" placeholder="👤 اسم المستخدم" value="أخد">
         <input type="password" id="loginPass" placeholder="🔒 كلمة السر">
         <button class="login-btn" onclick="checkLogin()">🔓 دخول إلى المنصة</button>
         <div id="loginError" class="error-msg"></div>
@@ -477,7 +501,10 @@
     <div id="kashfPanel" class="panel">
         <div class="panel-header">
             <h3>📋 كشف حساب الشهادات</h3>
-            <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
+            <div>
+                <button class="export-btn" onclick="exportToPDF()">📄 تصدير تقرير PDF</button>
+                <button class="back-btn" onclick="hideAllPanels()">🔙 العودة للرئيسية</button>
+            </div>
         </div>
         <div class="table-wrapper">
             <table id="certificatesTable">
@@ -613,7 +640,7 @@
         let tfoot = document.getElementById('tableFooter');
         if (!tbody) return;
         if (certificates.length === 0) {
-            tbody.innerHTML = '<td><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">📭 لا توجد شهادات مسجلة</td></tr>';
             tfoot.innerHTML = '';
             return;
         }
@@ -630,7 +657,7 @@
                         <td>${c.interestRate}%</td>
                         <td>${c.returnAmount} ج.م</td>
                         <td><button class="action-btn" onclick="deleteCertificate(${c.id})">🗑️ حذف</button></td>
-                    </tr>`;
+                     </tr>`;
         }
         tbody.innerHTML = html;
         tfoot.innerHTML = `<tr class="total-row"><td colspan="2"><strong>📊 الإجمالي</strong></td><td><strong>${totalAmount.toLocaleString()} ج.م</strong></td><td colspan="2"></td><td><strong>${totalReturn.toFixed(2)} ج.م</strong></td><td></td></tr>`;
@@ -653,10 +680,113 @@
                             <button class="action-btn restore-btn" onclick="restoreFromTrash(${t.id})">♻️ استعادة</button>
                             <button class="action-btn" onclick="permanentDelete(${t.id})">🗑️ حذف نهائي</button>
                         </td>
-                    </tr>`;
+                     </tr>`;
         }
         trashBody.innerHTML = html;
     }
+
+    // ============= دالة تصدير PDF =============
+    window.exportToPDF = async function() {
+        if (certificates.length === 0) {
+            alert('📭 لا توجد شهادات لتصدير التقرير');
+            return;
+        }
+
+        showToast('📄 جاري إنشاء التقرير...');
+        
+        // استخدام المكتبات
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+        
+        // عنوان التقرير
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ar-EG');
+        const timeStr = now.toLocaleTimeString('ar-EG');
+        
+        doc.setFont("helvetica");
+        doc.setFontSize(22);
+        doc.setTextColor(45, 106, 79);
+        doc.text("📜 تقرير الشهادات الاستثمارية", 148, 20, { align: "center" });
+        
+        doc.setFontSize(12);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`تاريخ التقرير: ${dateStr} - ${timeStr}`, 148, 32, { align: "center" });
+        
+        doc.setFontSize(10);
+        doc.text(`عدد الشهادات: ${certificates.length}`, 148, 40, { align: "center" });
+        
+        // حساب الإجماليات
+        let totalAmount = 0, totalReturn = 0;
+        for (let c of certificates) {
+            totalAmount += c.certAmount;
+            totalReturn += parseFloat(c.returnAmount);
+        }
+        
+        // إعداد بيانات الجدول
+        const tableData = certificates.map(c => [
+            c.certNumber,
+            c.purchaseDate,
+            c.certAmount.toLocaleString() + " ج.م",
+            c.dueDate,
+            c.interestRate + "%",
+            c.returnAmount + " ج.م"
+        ]);
+        
+        // إضافة صف الإجمالي
+        tableData.push([
+            { content: "الإجمالي", colSpan: 2, styles: { halign: 'left', fontStyle: 'bold' } },
+            { content: totalAmount.toLocaleString() + " ج.م", styles: { fontStyle: 'bold', textColor: [45, 106, 79] } },
+            { content: "", colSpan: 2 },
+            { content: totalReturn.toFixed(2) + " ج.م", styles: { fontStyle: 'bold', textColor: [45, 106, 79] } }
+        ]);
+        
+        // إنشاء الجدول
+        doc.autoTable({
+            head: [['رقم الشهادة', 'تاريخ الشراء', 'مبلغ الشهادة', 'تاريخ الاستحقاق', 'معدل العائد', 'مبلغ العائد']],
+            body: tableData,
+            startY: 50,
+            theme: 'grid',
+            headStyles: {
+                fillColor: [45, 106, 79],
+                textColor: 255,
+                fontStyle: 'bold',
+                halign: 'center'
+            },
+            bodyStyles: {
+                halign: 'center',
+                fontSize: 9
+            },
+            alternateRowStyles: {
+                fillColor: [245, 245, 245]
+            },
+            margin: { right: 15, left: 15 },
+            columnStyles: {
+                0: { cellWidth: 35 },
+                1: { cellWidth: 30 },
+                2: { cellWidth: 40 },
+                3: { cellWidth: 30 },
+                4: { cellWidth: 25 },
+                5: { cellWidth: 35 }
+            },
+            didDrawPage: function(data) {
+                // تذييل الصفحة
+                const pageCount = doc.internal.getNumberOfPages();
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`الصفحة ${doc.internal.getCurrentPageInfo().pageNumber} من ${pageCount}`, 280, 195, { align: "right" });
+            }
+        });
+        
+        // إضافة تذييل وتوقيع
+        const finalY = doc.lastAutoTable.finalY + 10;
+        doc.setFontSize(10);
+        doc.setTextColor(45, 106, 79);
+        doc.text("هذا التقرير صادر من منصة شهاداتي - جميع الحقوق محفوظة ©", 148, finalY, { align: "center" });
+        
+        // حفظ الملف
+        doc.save(`تقرير_الشهادات_${dateStr.replace(/\//g, '-')}.pdf`);
+        showToast('✅ تم تصدير التقرير بنجاح');
+    };
 
     function hideAllPanels() {
         document.getElementById('addPanel').classList.remove('active');
@@ -670,7 +800,7 @@
     window.checkLogin = function() {
         let name = document.getElementById('loginName').value.trim();
         let pass = document.getElementById('loginPass').value;
-        if (name === 'احمد الصباحي' && pass === '181265') {
+        if (name === 'أخد' && pass === '181265') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
             document.getElementById('userName').innerText = name;
